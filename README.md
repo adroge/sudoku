@@ -11,7 +11,23 @@ Not sure what Sudoku is? Check here: [What is Sudoku?](https://duckduckgo.com/?q
 - run the app
 - Profit
 
-## Example
+Leave all the starting values for the puzzle at zero to get all possible solutions.
+For a 9x9 puzzle, that would be 6,670,903,752,021,072,936,960 solutions. Enter in a
+few numbers to get a subset of those solutions.
+
+```go
+{0, 6, 0, 0, 0, 0, 0, 0, 9},
+{0, 0, 0, 9, 0, 0, 0, 0, 6},
+{0, 0, 0, 0, 0, 0, 0, 0, 0},
+{0, 0, 0, 0, 0, 0, 0, 0, 0},
+{0, 0, 0, 0, 6, 0, 0, 3, 0},
+{0, 0, 0, 0, 9, 8, 0, 0, 1},
+{9, 2, 0, 0, 0, 0, 0, 0, 0},
+{0, 0, 0, 0, 0, 0, 0, 2, 7},
+{4, 0, 0, 0, 0, 0, 0, 0, 0},
+```
+
+## Example Usage
 
 ```sh
 go run ./sudoku.go
