@@ -115,7 +115,7 @@ func copySolution() (solution [][]int) {
 	return
 }
 
-func isValidValue(row, col, potentialValue int) (isValid bool) {
+func isValidValue(row, col, potentialValue int) bool {
 	for colCheck := range table[row] {
 		if table[row][colCheck] == potentialValue {
 			return false
