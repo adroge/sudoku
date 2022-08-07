@@ -7,8 +7,9 @@ import (
 )
 
 var (
-	solutions = make(chan [][]int, 2)
-	table     = [][]int{
+	dimension, boxDimension int
+	solutions               = make(chan [][]int, 2)
+	table                   = [][]int{
 
 		// {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 		// {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -41,28 +42,26 @@ var (
 		// {0, 0, 0, 0},
 		// {0, 0, 0, 0},
 		// {0, 0, 0, 0},
-
-		// {0, 0},
-		// {0, 0},
 
 		// {0},
 	}
 )
 
 func main() {
-	if err := validInput(); err != nil {
+	setDimensions()
+	if err := validateTable(); err != nil {
 		fmt.Println(err)
 		return
 	}
 	go sudokuSolver()
-	more := ""
+	another := ""
 	for solution := range solutions {
 		for _, row := range solution {
 			fmt.Println(row)
 		}
 		fmt.Print("Show another solution [y/n]? ")
-		fmt.Scanln(&more)
-		if more != "y" {
+		fmt.Scanln(&another)
+		if another != "y" {
 			break
 		}
 		if len(solutions) == 0 {
@@ -71,18 +70,22 @@ func main() {
 	}
 }
 
-func validInput() error {
-	dimension := len(table)
-	if dimension < 1 {
+func setDimensions() {
+	dimension = len(table)
+	boxDimension = int(math.Sqrt(float64(dimension)))
+}
+
+func validateTable() error {
+	if len(table) < 1 {
 		return errors.New("no data")
 	}
 	for _, row := range table {
-		if len(row) != dimension {
+		if len(row) != len(table) {
 			return errors.New("size mismatch")
 		}
 	}
-	dimensionSqrt := math.Sqrt(float64(dimension))
-	if math.Pow(dimensionSqrt, 2) != float64(dimension) {
+	dimensionSqrt := math.Sqrt(float64(len(table)))
+	if math.Pow(dimensionSqrt, 2) != float64(len(table)) {
 		return errors.New("not a perfect square")
 	}
 	return nil
@@ -107,9 +110,9 @@ func sudokuSolver() {
 }
 
 func copySolution() (solution [][]int) {
-	solution = make([][]int, len(table))
+	solution = make([][]int, dimension)
 	for i, v := range table {
-		solution[i] = make([]int, len(v))
+		solution[i] = make([]int, dimension)
 		copy(solution[i], v)
 	}
 	return
@@ -126,11 +129,10 @@ func isValidValue(row, col, potentialValue int) bool {
 			return false
 		}
 	}
-	dimension := int(math.Sqrt(float64(len(table))))
-	boxColStart := (col / dimension) * dimension
-	boxRowStart := (row / dimension) * dimension
-	for boxRow := 0; boxRow < dimension; boxRow++ {
-		for boxCol := 0; boxCol < dimension; boxCol++ {
+	boxColStart := (col / boxDimension) * boxDimension
+	boxRowStart := (row / boxDimension) * boxDimension
+	for boxRow := 0; boxRow < boxDimension; boxRow++ {
+		for boxCol := 0; boxCol < boxDimension; boxCol++ {
 			if table[boxRowStart+boxRow][boxColStart+boxCol] == potentialValue {
 				return false
 			}
