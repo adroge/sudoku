@@ -2,18 +2,26 @@
 
 This is a Sudoku solver for any sized Sudoku.
 
+- [Sudoku Solver](#sudoku-solver)
+  - [What is Sudoku?](#what-is-sudoku)
+  - [How To Run This](#how-to-run-this)
+    - [Example Command Line](#example-command-line)
+  - [Very Large Puzzles](#very-large-puzzles)
+
+## What is Sudoku?
+
 Not sure what Sudoku is? Check here: [What is Sudoku?](https://duckduckgo.com/?q=what+is+sudoku)
 
-## How to use
+## How To Run This
 
 - Install Go - [here](https://go.dev/doc/install)
 - Clone or download this repo - [docs](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository)
 - run the app
 - Profit
 
-Leave all the starting values for the puzzle at zero to get all possible solutions.
-For a 9x9 puzzle, that would be 6,670,903,752,021,072,936,960 solutions. Enter in a
-few numbers to get a subset of those solutions.
+Leave all the starting values for the puzzle at zero to get all possible solutions. For a 9x9 puzzle, that would be 6,670,903,752,021,072,936,960 solutions. Enter in a few numbers to get a subset of those solutions.
+
+Because there is no check for this, be mindful not to set invalid data with no solutions.
 
 ```go
 {0, 6, 0, 0, 0, 0, 0, 0, 9},
@@ -27,7 +35,7 @@ few numbers to get a subset of those solutions.
 {4, 0, 0, 0, 0, 0, 0, 0, 0},
 ```
 
-## Example Usage
+### Example Command Line
 
 ```sh
 go run ./sudoku.go
@@ -43,8 +51,10 @@ go run ./sudoku.go
 Show another solution [y/n]?
 ```
 
-You can comment and uncomment the sections in the table array, set their
-values, have fun, make this better, etc....
+You can comment and uncomment the sections in the table array, set their values, have fun, make this better, etc....
 
-If you try solving a 25x25 Sudoku, it is going to take a long time. No
-guarantees here.
+You can also change the format of how the solution is printed.
+
+## Very Large Puzzles
+
+When calculating 25x25 (and larger) Sudoku puzzles, it is going to take a long, long, time. By adding a sufficient amount of starting numbers to the table, you can generate a subset of solutions instead. The larger the puzzle, the more starting values there should be.

@@ -4,6 +4,15 @@ import (
 	"errors"
 	"fmt"
 	"math"
+	"strconv"
+	"strings"
+)
+
+type formatType int
+
+const (
+	asSimple formatType = iota
+	asCode
 )
 
 var (
@@ -56,9 +65,7 @@ func main() {
 	go sudokuSolver()
 	another := ""
 	for solution := range solutions {
-		for _, row := range solution {
-			fmt.Println(row)
-		}
+		show(solution, asSimple)
 		fmt.Print("Show another solution [y/n]? ")
 		fmt.Scanln(&another)
 		if another != "y" {
@@ -70,11 +77,14 @@ func main() {
 	}
 }
 
+// setDimensions stores the table dimensions used for calculations.
 func setDimensions() {
 	dimension = len(table)
 	boxDimension = int(math.Sqrt(float64(dimension)))
 }
 
+// validateTable returns an error if the table itself isn't in an a state
+// that would yield a solution.
 func validateTable() error {
 	if len(table) < 1 {
 		return errors.New("no data")
@@ -91,6 +101,26 @@ func validateTable() error {
 	return nil
 }
 
+// show displays the solution. There is a simple display that shows the array,
+// and there is a option to show it as a Go array.
+//
+//	show(solution, asCode)
+func show(solution [][]int, format formatType) {
+	for _, row := range solution {
+		switch format {
+		case asCode:
+			strRow := make([]string, len(row))
+			for i, num := range row {
+				strRow[i] = strconv.Itoa(num)
+			}
+			fmt.Println("{" + strings.Join(strRow, ",") + "},")
+		case asSimple:
+			fmt.Println(row)
+		}
+	}
+}
+
+// sudokuSolver finds a solution based upon the table.
 func sudokuSolver() {
 	for row := range table {
 		for col := range table[row] {
@@ -118,6 +148,8 @@ func copySolution() (solution [][]int) {
 	return
 }
 
+// isValidValue checks if the number at the specific row and column
+// would be correct.
 func isValidValue(row, col, potentialValue int) bool {
 	for colCheck := range table[row] {
 		if table[row][colCheck] == potentialValue {
