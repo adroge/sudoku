@@ -85,7 +85,7 @@ func validateTable() error {
 		}
 	}
 	dimensionSqrt := math.Sqrt(float64(len(table)))
-	if math.Pow(dimensionSqrt, 2) != float64(len(table)) {
+	if math.Pow(math.Floor(dimensionSqrt), 2) != float64(len(table)) {
 		return errors.New("not a perfect square")
 	}
 	return nil
